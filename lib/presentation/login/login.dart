@@ -87,7 +87,7 @@ class _LoginState extends State<LoginScreen>{
     super.initState();
 
     _prefs.then((value) {
-      String phone = value.getString("email") ?? "";
+      String phone =value.getString("email") ?? "";
       String password = value.getString("password") ?? "";
 
       if(phone.isNotEmpty){
@@ -143,7 +143,7 @@ class _LoginState extends State<LoginScreen>{
           else{
 
             Fluttertoast.showToast(
-                msg: "Welcome",
+                msg: "Welcome "+Constants.user.name,
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.BOTTOM,
                 timeInSecForIosWeb: 1,
@@ -176,70 +176,72 @@ class _LoginState extends State<LoginScreen>{
         child: Scaffold(
           backgroundColor: appTheme.whiteA700,
           resizeToAvoidBottomInset: true,
-          body: Container(
-            height: 764.h,
-            width: double.maxFinite,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    width: double.maxFinite,
-                    padding: EdgeInsets.symmetric(vertical: 104.h),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          ImageConstant.imgGroup12
-                        ),
-                        fit: BoxFit.cover
-                      )
+          body: SingleChildScrollView(
+            child: Container(
+              height: 764.h,
+              width: double.maxFinite,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      width: double.maxFinite,
+                      padding: EdgeInsets.symmetric(vertical: 104.h),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  ImageConstant.imgGroup12
+                              ),
+                              fit: BoxFit.cover
+                          )
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CustomImageView(
+                            imagePath: ImageConstant.imgVector46x112,
+                            height: 46.h,
+                            width: 112.h,
+                            alignment: Alignment.centerRight,
+                          ),
+                          SizedBox(height: 28.h,),
+                          _buildDiscoverCoursesSection(context),
+                          SizedBox(height: 138.h)
+                        ],
+                      ),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                  ),
+                  Container(
+                    height: 764.h,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
                       children: [
                         CustomImageView(
-                          imagePath: ImageConstant.imgVector46x112,
-                          height: 46.h,
-                          width: 112.h,
-                          alignment: Alignment.centerRight,
+                          imagePath: ImageConstant.imgGroup13,
+                          height: 400.h,
+                          width: double.maxFinite,
                         ),
-                        SizedBox(height: 28.h,),
-                        _buildDiscoverCoursesSection(context),
-                        SizedBox(height: 138.h)
+                        _buildLoginSection(context),
+                        _buildImageStackCollection(context),
+                        CustomImageView(
+                          imagePath: ImageConstant.imgNileLogo1,
+                          height: 198.h,
+                          width: 210.h,
+                          alignment: Alignment.topCenter,
+                        ),
+                        CustomImageView(
+                          imagePath: ImageConstant.imgVector,
+                          height: 80.h,
+                          width: 114.h,
+                          alignment: Alignment.topRight,
+                          margin: EdgeInsets.only(top: 150.h),
+                        )
                       ],
                     ),
-                  ),
-                ),
-                Container(
-                  height: 764.h,
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      CustomImageView(
-                        imagePath: ImageConstant.imgGroup13,
-                        height: 400.h,
-                        width: double.maxFinite,
-                      ),
-                      _buildLoginSection(context),
-                      _buildImageStackCollection(context),
-                      CustomImageView(
-                        imagePath: ImageConstant.imgNileLogo1,
-                        height: 198.h,
-                        width: 210.h,
-                        alignment: Alignment.topCenter,
-                      ),
-                      CustomImageView(
-                        imagePath: ImageConstant.imgVector,
-                        height: 80.h,
-                        width: 114.h,
-                        alignment: Alignment.topRight,
-                        margin: EdgeInsets.only(top: 150.h),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         )
@@ -374,13 +376,19 @@ class _LoginState extends State<LoginScreen>{
             else{
 
               Fluttertoast.showToast(
-                  msg: 'Correct Data',
+                  msg: "Welcome "+Constants.user.name,
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
                   timeInSecForIosWeb: 1,
                   backgroundColor: Colors.green,
                   textColor: Colors.white,
                   fontSize: 16.0
+              );
+
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+                    (Route<dynamic> route) => false,
               );
 
             }
@@ -415,8 +423,7 @@ class _LoginState extends State<LoginScreen>{
 
 
   Widget _buildLoginSection(BuildContext context){
-    return SingleChildScrollView(
-      child: Container(
+    return Container(
         height: 380.h,
         margin: EdgeInsets.only(left: 22.h, right: 14.h, bottom: 24.h),
         child: Row(
@@ -462,7 +469,7 @@ class _LoginState extends State<LoginScreen>{
             )
           ],
         ),
-      ),
+      
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nile_training/presentation/profile/profile.dart';
 
 import '../../theme/theme_helper.dart';
 import 'CategoriesPage.dart';
@@ -36,7 +37,7 @@ class _MyHomePageState extends State<HomePage> {
         index: currentIndex,
         children: [
           CategoriesPage(),
-          CategoriesPage()
+          ProfilePage()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

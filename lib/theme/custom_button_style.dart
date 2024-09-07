@@ -15,6 +15,15 @@ class CustomButtonStyles{
   );
 
 
+  static ButtonStyle get fillOnError => ElevatedButton.styleFrom(
+      backgroundColor: theme.colorScheme.onError,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.h)
+      ),
+      elevation: 0
+  );
+
+
   static ButtonStyle get none => ButtonStyle(
      backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
     elevation: MaterialStateProperty.all<double>(0),

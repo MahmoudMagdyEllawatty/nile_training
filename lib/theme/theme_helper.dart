@@ -90,7 +90,8 @@ class ColorSchemes {
   static final lightCodeColorScheme = ColorScheme.light(
     primary: Color(0xFF6c5338),
     onPrimary: Color(0xFF271001),
-    onPrimaryContainer: Color(0xFF9A8351)
+    onPrimaryContainer: Color(0xFF9A8351),
+    onError: Color(0xFF0404)
   );
 }
 
