@@ -47,5 +47,16 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+	    <string>fetch</string>
+	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+	    <key>NSAllowArbitraryLoads</key>
+	    <true/>
+	</dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Use Phone For Payment</string>
 </dict>
 </plist>

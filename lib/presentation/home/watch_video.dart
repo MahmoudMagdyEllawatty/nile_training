@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:nile_training/core/app_export.dart';
+import 'package:no_screenshot/no_screenshot.dart';
 import 'package:vimeo_player_flutter/vimeo_player_flutter.dart';
 import 'package:vimeo_video_player/vimeo_video_player.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -33,6 +34,7 @@ class WatchVideoPage extends StatefulWidget{
 class VideoState extends State<WatchVideoPage>{
 
   late final WebViewController _controller;
+  final _noScreenshot = NoScreenshot.instance;
 
 
 
@@ -41,6 +43,7 @@ class VideoState extends State<WatchVideoPage>{
     // TODO: implement initState
     super.initState();
 
+     _noScreenshot.screenshotOff();
     // #docregion platform_features
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {

@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nile_training/core/app_export.dart';
 import 'package:nile_training/core/utils/Constants.dart';
+import 'package:nile_training/presentation/login/login.dart';
+import 'package:nile_training/presentation/splash/splash.dart';
 import 'package:nile_training/theme/custom_button_style.dart';
 import 'package:nile_training/widgets/custom_elevated_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme/theme_helper.dart';
 import '../../widgets/custom_text_form_field.dart';
@@ -31,13 +34,31 @@ class ProfileState extends State<ProfilePage>{
     // TODO: implement initState
     super.initState();
     setState(() {
-      nameController.text = Constants.user.name;
-      emailController.text = Constants.user.email;
+      if(Constants.user.id == "0"){
+        nameController.text = Constants.user.name;
+        emailController.text = Constants.user.email;
+      }
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if(Constants.user.id == "0"){
+      return Scaffold(
+
+        body: Container(
+          child: Card(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildLogin(context)
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
 
       body: Container(
@@ -49,7 +70,8 @@ class ProfileState extends State<ProfilePage>{
                 _buildEmail(context),
                 _buildPassword(context),
                 _buildUpdateProfile(context),
-                _buildDeleteAccount(context)
+                _buildDeleteAccount(context),
+                _buildLogout(context)
               ],
             ),
           ),
@@ -146,6 +168,28 @@ class ProfileState extends State<ProfilePage>{
     );
   }
 
+  Widget _buildLogout(BuildContext context){
+    return Container(
+      margin: EdgeInsets.only(top: 20.h),
+      child: CustomElevatedButton(
+        text: "Logout",
+        onPressed: ()  async {
+          final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+          final SharedPreferences prefs = await _prefs;
+          prefs.setString("email", "");
+          prefs.setString("password", "");
+
+        Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => SplashScreen()),
+        (Route<dynamic> route) => false,
+        );
+
+
+        },),
+    );
+  }
+
   Widget _buildDeleteAccount(BuildContext context){
     return Container(
       margin: EdgeInsets.only(top: 20.h),
@@ -160,6 +204,23 @@ class ProfileState extends State<ProfilePage>{
                 backgroundColor: Colors.green,
                 textColor: Colors.white,
                 fontSize: 14.0)
+        },),
+    );
+  }
+
+  Widget _buildLogin(BuildContext context){
+    return Container(
+      margin: EdgeInsets.only(top: 20.h),
+      child: CustomElevatedButton(
+        text: "Login",
+        onPressed: ()  {
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+                (Route<dynamic> route) => false,
+          );
+
         },),
     );
   }

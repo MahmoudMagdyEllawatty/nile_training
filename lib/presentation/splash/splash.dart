@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:nile_training/models/Student.dart';
 import '../../core/app_export.dart';
+import '../../core/utils/Constants.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -23,7 +25,8 @@ class _SplashState extends State<SplashScreen>{
     super.initState();
 
     Timer(Duration(seconds: 3), () {
-      Navigator.pushNamed(context, AppRoutes.loginScreen);
+      Constants.user = Student("0", "", "");
+      Navigator.pushNamed(context, AppRoutes.homeScreen);
     });
 
   }

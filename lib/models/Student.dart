@@ -15,7 +15,7 @@ class Student {
     );
   }
 
-  Student.fromJson(Map<String,dynamic> json): id=json['id'],name=json['name'],email=json['email'];
+  Student.fromJson(Map<String,dynamic> json): id=json['id'].toString(),name=json['name'],email=json['email'];
 
   Map<String,dynamic> toJson(){
     final Map<String, dynamic> data = new Map<String, dynamic>();

@@ -56,7 +56,7 @@ class VideosState extends State<VideosPage>{
 
         for(int i = 0;i< parsed['products_count'];i++){
           final catObj = videosData[i];
-          Video  video = Video(catObj['id'], catObj['name'],catObj['start_date'],catObj['end_date'],
+          Video  video = Video(catObj['id'].toString(), catObj['name'],catObj['start_date'],catObj['end_date'],
               catObj['description'] ?? "",
               catObj['thumb'] ?? "",
               catObj['video_file'] ?? "");

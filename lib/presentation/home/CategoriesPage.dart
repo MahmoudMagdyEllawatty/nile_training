@@ -50,7 +50,7 @@ class CategoriesState extends State<CategoriesPage>{
 
         for(int i = 0;i< parsed['products_count'];i++){
           final catObj = categoriesData[i];
-          Category  category = Category(catObj['id'], catObj['name']);
+          Category  category = Category(catObj['id'].toString(), catObj['name']);
           categories.add(category);
         }
 

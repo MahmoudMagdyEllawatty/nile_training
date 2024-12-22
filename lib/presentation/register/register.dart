@@ -58,7 +58,7 @@ class _RegisterState extends State<RegisterScreen>{
           "email": emailController.text.toString(),
           "password" : passwordController.text.toString(),
           "name" : nameController.text.toString(),
-          "phone": phoneController.text.toString()
+          "phone": ""
         })
     );
     if(response.statusCode == 200){
@@ -134,15 +134,10 @@ class _RegisterState extends State<RegisterScreen>{
                     children: [
 
 
-                      _buildSignup(context),
+
                       _buildLoginSection(context),
 
-                      CustomImageView(
-                        imagePath: ImageConstant.imgNileLogo1,
-                        height: 198.h,
-                        width: 210.h,
-                        alignment: Alignment.topCenter,
-                      ),
+
                       CustomImageView(
                         imagePath: ImageConstant.imgVector,
                         height: 80.h,
@@ -270,7 +265,7 @@ class _RegisterState extends State<RegisterScreen>{
       alignment: Alignment.bottomCenter,
       child: Container(
         width: double.maxFinite,
-        padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 170.h),
+        padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 10.h),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
@@ -386,7 +381,6 @@ class _RegisterState extends State<RegisterScreen>{
   Widget _buildLoginSection(BuildContext context){
     return SingleChildScrollView(
       child: Container(
-        height: 294.h,
         margin: EdgeInsets.only(left: 22.h, right: 14.h, bottom: 24.h),
         child: Row(
           children: [
@@ -412,9 +406,9 @@ class _RegisterState extends State<RegisterScreen>{
                       SizedBox(height: 14.h,),
                       _buildEmail(context),
                       SizedBox(height: 14.h,),
-                      _buildPhone(context),
-                      SizedBox(height: 14.h,),
                       _buildPassword(context),
+                      SizedBox(height: 14.h,),
+                      _buildSignup(context),
                     ],
                   ),
                 )

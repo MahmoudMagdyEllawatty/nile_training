@@ -55,11 +55,12 @@ class CoursesState extends State<CoursesPage>{
 
         for(int i = 0;i< parsed['products_count'];i++){
           final catObj = coursesData[i];
-          Course  course = Course(catObj['id'], catObj['name'],catObj['start_date'],catObj['end_date'],
+          Course  course = Course(catObj['id'].toString(), catObj['name']
+              ,catObj['start_date'],catObj['end_date'],
           catObj['teacherName'] ?? "",
               catObj['notes'] ?? "",
-              catObj['cash_price'] ?? "",
-              catObj['installments_price'] ?? "",
+              catObj['cash_price'] != null ? catObj['cash_price'].toString() : "",
+              catObj['installments_price'] != null ? catObj['installments_price'].toString() : "",
           catObj['image'] ?? "");
 
           courses.add(course);
