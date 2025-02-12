@@ -49,14 +49,21 @@
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
-	    <string>fetch</string>
+		<string>fetch</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	    <key>NSAllowArbitraryLoads</key>
-	    <true/>
+		<key>NSAllowArbitraryLoads</key>
+		<true/>
 	</dict>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Use Phone For Payment</string>
+	<key>SKAdNetworkItems</key>
+	<array>
+	    <dict>
+	        <key>SKAdNetworkIdentifier</key>
+	        <string>v9wttpbfk9.skadnetwork</string>
+	    </dict>
+	</array>
 </dict>
 </plist>
