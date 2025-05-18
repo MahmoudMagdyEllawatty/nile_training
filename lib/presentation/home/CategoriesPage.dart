@@ -4,9 +4,11 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:nile_training/core/app_export.dart';
+import 'package:screen_capture_utils/screen_capture_utils.dart';
 
 import '../../core/utils/Constants.dart';
 import '../../models/Category.dart';
@@ -21,7 +23,7 @@ class CategoriesPage extends StatefulWidget{
 }
 
 
-class CategoriesState extends State<CategoriesPage>{
+class CategoriesState extends State<CategoriesPage>  {
 
   List<Category> categories = [];
 
@@ -31,8 +33,8 @@ class CategoriesState extends State<CategoriesPage>{
     // TODO: implement initState
     super.initState();
     loadCategories();
-  }
 
+  }
 
   Future<String> loadCategories() async{
     final response = await http.get(
@@ -60,6 +62,8 @@ class CategoriesState extends State<CategoriesPage>{
       return "";
     }
   }
+
+
 
 
   @override
@@ -105,7 +109,7 @@ class CategoriesState extends State<CategoriesPage>{
                         ),
                         onTap: () {
                           Constants.category = categories[index];
-                          
+
                           Navigator.pushNamed(context, AppRoutes.coursesScreen);
                         },
                       )

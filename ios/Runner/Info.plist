@@ -56,14 +56,27 @@
 		<key>NSAllowArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSAllowsLocalNetworking</key>
+    <true/>
+    <key>NSAllowsArbitraryLoadsInWebContent</key>
+    <true/>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Use Phone For Payment</string>
+	<string>We need access to the microphone for audio playback.</string>
 	<key>SKAdNetworkItems</key>
 	<array>
-	    <dict>
-	        <key>SKAdNetworkIdentifier</key>
-	        <string>v9wttpbfk9.skadnetwork</string>
-	    </dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>v9wttpbfk9.skadnetwork</string>
+		</dict>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to the camera for video recording.</string>
+    <key>UIRequiresPersistentWiFi</key>
+    <true/>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>fetch</string>
+      <string>remote-notification</string>
+    </array>
 </dict>
 </plist>

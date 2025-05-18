@@ -65,9 +65,9 @@ class _LoginState extends State<LoginScreen>{
       if(login.code == 200){
         Constants.user = login.user!;
 
-        final SharedPreferences prefs = await _prefs;
-        prefs.setString("email", emailController.text.toString());
-        prefs.setString("password", passwordController.text.toString());
+        // final SharedPreferences prefs = await _prefs;
+        // prefs.setString("email", emailController.text.toString());
+        // prefs.setString("password", passwordController.text.toString());
         return "تم تسجيل الدخول بنجاح";
       }else{
         return login.msg;
