@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:nile_training/presentation/home/CoursesPage.dart';
 import 'package:nile_training/presentation/home/course_details.dart';
 import 'package:nile_training/presentation/home/home.dart';
+import 'package:nile_training/presentation/home/pdf_viewer.dart';
+import 'package:nile_training/presentation/home/send_request.dart';
 import 'package:nile_training/presentation/home/watch_video.dart';
 import 'package:nile_training/presentation/login/login.dart';
 import 'package:nile_training/presentation/register/register.dart';
@@ -21,6 +23,7 @@ class AppRoutes {
   static const String courseDetailsScreen = "/course_details";
   static const String courseVideosScreen = "/course_videos";
   static const String watchVideoScreen = "/watch_video";
+  static const String sendRequestScreen = "/send_request";
 
   static Map<String, WidgetBuilder> routes = {
     zeroScreen: (context) => SplashScreen(),
@@ -31,6 +34,7 @@ class AppRoutes {
     coursesScreen : (context) => CoursesPage(),
     courseDetailsScreen: (context) => CourseDetailsPage(),
     courseVideosScreen : (context) => VideosPage(),
-    watchVideoScreen : (context) => WatchVideoPage()
+    watchVideoScreen : (context) => WatchVideoPage(),
+    sendRequestScreen: (context)=> SendRequestPage()
   };
 }

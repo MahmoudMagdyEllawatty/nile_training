@@ -54,7 +54,7 @@ class CourseDetailsState extends State<CourseDetailsPage>{
         ),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
 
-        title: Text(Constants.category.name,style: theme.textTheme.titleLarge!.copyWith(height: 1.60),),
+        title: Text(Constants.course.name,style: theme.textTheme.titleLarge!.copyWith(height: 1.60),),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -187,8 +187,15 @@ class CourseDetailsState extends State<CourseDetailsPage>{
                                   Navigator.pushNamed(
                                       context, AppRoutes.loginScreen);
                                 }else {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.courseVideosScreen);
+                                  if(Constants.course.can_watch=="1"){
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.courseVideosScreen);
+                                  }else{
+                                    // open send subscription request
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.sendRequestScreen);
+                                  }
+
                                 }
                             },
                         ),

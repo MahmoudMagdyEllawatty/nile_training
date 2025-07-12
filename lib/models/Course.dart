@@ -9,12 +9,13 @@ class Course{
   late String cashPrice;
   late String installmentsPrice;
   late String image;
+  late String can_watch;
 
 
   Course.empty();
 
 
   Course(this.id,this.name, this.startDate, this.endDate,this.teacherName,this.notes,this.cashPrice,this.installmentsPrice,
-      this.image);
+      this.image,this.can_watch);
 
 }

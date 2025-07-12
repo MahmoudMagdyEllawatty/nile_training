@@ -26,7 +26,7 @@ class _SplashState extends State<SplashScreen>{
 
     Timer(Duration(seconds: 3), () {
       Constants.user = Student("0", "", "");
-      Navigator.pushNamed(context, AppRoutes.homeScreen);
+      Navigator.pushNamed(context, AppRoutes.loginScreen);
     });
 
   }

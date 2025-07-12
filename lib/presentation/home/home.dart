@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:nile_training/presentation/home/my_requests.dart';
 import 'package:nile_training/presentation/profile/profile.dart';
 
 import '../../theme/theme_helper.dart';
 import 'CategoriesPage.dart';
+import 'courses_page.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -13,7 +15,7 @@ class HomePage extends StatefulWidget {
 class _MyHomePageState extends State<HomePage> {
 
   int currentIndex = 0;
-  List<String> titles = ["Categories","Profile"];
+  List<String> titles = ["Categories","Courses","Requests","Profile"];
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +39,22 @@ class _MyHomePageState extends State<HomePage> {
         index: currentIndex,
         children: [
           CategoriesPage(),
+          MyCoursesPage(),
+          MyRequestsPage(),
           ProfilePage()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
+        type: BottomNavigationBarType.shifting,
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
         items: [
-          BottomNavigationBarItem(icon: Icon( Icons.category), label: "Categories"),
-          BottomNavigationBarItem(icon: Icon( Icons.person), label: "Profile")
+          BottomNavigationBarItem(icon: Icon( Icons.category), label: "Categories",backgroundColor: Colors.white),
+          BottomNavigationBarItem(icon: Icon(Icons.list),label: "My Courses",backgroundColor: Colors.white),
+          BottomNavigationBarItem(icon: Icon(Icons.list_alt),label: "My Requests",backgroundColor: Colors.white),
+          BottomNavigationBarItem(icon: Icon( Icons.person), label: "Profile",backgroundColor: Colors.white)
         ],
         onTap: (index){
           setState(() {

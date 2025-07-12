@@ -1,12 +1,19 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:nile_training/core/app_export.dart';
+import 'package:nile_training/presentation/home/pdf_viewer.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/utils/Constants.dart';
 import '../../models/Category.dart';
@@ -59,7 +66,8 @@ class VideosState extends State<VideosPage>{
           Video  video = Video(catObj['id'].toString(), catObj['name'],catObj['start_date'],catObj['end_date'],
               catObj['description'] ?? "",
               catObj['thumb'] ?? "",
-              catObj['video_file'] ?? "");
+              catObj['video_file'] ?? "",
+              catObj['pdf'] ?? "");
 
           videos.add(video);
         }
@@ -118,7 +126,35 @@ class VideosState extends State<VideosPage>{
                                     ),
                                   ),
                                 ),),
-                                Center(child: Text(videos[index].name,style: theme.textTheme.bodyMedium!.copyWith(height: 1.60),)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        videos[index].name,
+                                        style: theme.textTheme.bodyMedium!.copyWith(height: 1.60),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: videos[index].pdf != "",
+                                      child: IconButton(
+                                        icon: Icon(Icons.picture_as_pdf),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => PdfViewPage(
+                                                  pdfUrl: "https://admin.nilefortraining.com/storage/app/"+videos[index].pdf,
+                                                  name:videos[index].name),
+                                            ),
+                                          );
+
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ],
                             )
                         ),
@@ -139,4 +175,28 @@ class VideosState extends State<VideosPage>{
     );
   }
 
+
+  Future<void> downloadVideo(String url, String filename) async {
+    try {
+      // طلب صلاحية التخزين
+      var status = await Permission.storage.request();
+      if (!status.isGranted) {
+        print("Permission denied");
+        return;
+      }
+
+      final taskId = await FlutterDownloader.enqueue(
+        url: url,
+        savedDir: '/storage/emulated/0/Download', // مجلد التنزيلات
+        fileName: filename,
+        showNotification:
+        true, // إظهار إشعار عند انتهاء التحميل
+        openFileFromNotification:
+        true, // فتح الملف عند الضغط على الإشعار
+      );
+    } catch (e) {
+      print("Download error: $e");
+
+    }
+  }
 }

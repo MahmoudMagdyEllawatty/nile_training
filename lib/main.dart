@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:nile_training/routes/app_routes.dart';
 import 'package:nile_training/theme/theme_helper.dart';
 import 'core/app_export.dart';
@@ -11,11 +11,12 @@ import 'dart:io' show Platform;
 var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  //SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   ThemeHelper().changeTheme('primary');
 
-  if(Platform.isAndroid)
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  await FlutterDownloader.initialize(
+      debug: false // to see logs
+  );
 
   runApp(MyApp());
 }

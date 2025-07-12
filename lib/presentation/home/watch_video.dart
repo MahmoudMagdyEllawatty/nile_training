@@ -13,7 +13,6 @@ import 'package:nile_training/core/app_export.dart';
 import 'package:nile_training/presentation/login/login.dart';
 import 'package:nile_training/widgets/custom_elevated_button.dart';
 import 'package:no_screenshot/no_screenshot.dart';
-import 'package:screen_capture_utils/screen_capture_utils.dart';
 import 'package:vimeo_player_flutter/vimeo_player_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -38,12 +37,18 @@ class WatchVideoPage extends StatefulWidget{
 class VideoState extends State<WatchVideoPage> {
 
   //late final WebViewController _controller;
+  bool isFullScreen = false;
   final _noScreenshot = NoScreenshot.instance;
 
   bool isRecording = false;
   bool isScreen = false;
   static const platform = MethodChannel('com.example.app/screenRecording');
   static const platformScreenShot = MethodChannel('com.example.screenshotProtection');
+
+  static const androidPlatform = MethodChannel('com.example.app/screen_recording_detection'); // نفس اسم القناة من Java
+
+  String _screenRecordStatus = "Not started";
+
 
    void startListeningForScreenshots() {
     platformScreenShot.setMethodCallHandler((call) async {
@@ -60,98 +65,34 @@ class VideoState extends State<WatchVideoPage> {
      setState(() {
        isScreen = true;
      });
+     sendStatic(3);
   }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    // _noScreenshot.screenshotOff();
-    // Listen for screen recording changes.
+
+    // ضبط اتجاه الشاشة على الوضع العرضي
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
+
     platform.setMethodCallHandler(_methodCallHandler);
     startListeningForScreenshots();
+    sendStatic(1);
 
-    // #docregion platform_features
-//     late final PlatformWebViewControllerCreationParams params;
-//     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
-//       params = WebKitWebViewControllerCreationParams(
-//         allowsInlineMediaPlayback: true,
-//         mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
-//       );
-//     } else {
-//       params = const PlatformWebViewControllerCreationParams();
-//     }
-//
-//     final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
-//     // #enddocregion platform_features
-//
-//     controller
-//       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-//       ..setNavigationDelegate(
-//         NavigationDelegate(
-//           onProgress: (int progress) {
-//             debugPrint('WebView is loading (progress : $progress%)');
-//           },
-//           onPageStarted: (String url) {
-//             debugPrint('Page started loading: $url');
-//           },
-//           onPageFinished: (String url) {
-//             debugPrint('Page finished loading: $url');
-//           },
-//           onWebResourceError: (WebResourceError error) {
-//             debugPrint('''
-// Page resource error:
-//   code: ${error.errorCode}
-//   description: ${error.description}
-//   errorType: ${error.errorType}
-//   isForMainFrame: ${error.isForMainFrame}
-//           ''');
-//           },
-//           onNavigationRequest: (NavigationRequest request) {
-//             if (request.url.startsWith('https://www.youtube.com/')) {
-//               debugPrint('blocking navigation to ${request.url}');
-//               return NavigationDecision.prevent;
-//             }
-//             debugPrint('allowing navigation to ${request.url}');
-//             return NavigationDecision.navigate;
-//           },
-//           onUrlChange: (UrlChange change) {
-//             debugPrint('url change to ${change.url}');
-//           },
-//         ),
-//       )
-//       ..addJavaScriptChannel(
-//         'Toaster',
-//         onMessageReceived: (JavaScriptMessage message) {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             SnackBar(content: Text(message.message)),
-//           );
-//         },
-//       )
-//       ..loadRequest(Uri.parse('https://admin.nilefortraining.com/video/play/'+Constants.video.link));
-//
-//     // setBackgroundColor is not currently supported on macOS.
-//     if (kIsWeb || !Platform.isMacOS) {
-//       controller.setBackgroundColor(const Color(0x80000000));
-//     }
-//
-//     // #docregion platform_features
-//     if (controller.platform is AndroidWebViewController) {
-//       AndroidWebViewController.enableDebugging(true);
-//       (controller.platform as AndroidWebViewController)
-//           .setMediaPlaybackRequiresUserGesture(false);
-//     }
-    // #enddocregion platform_features
-
-    //_controller = controller;
-
-
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: []);
-    // initPlatformState();
-    //
-    // WidgetsBinding.instance!.addObserver(this);
   }
 
+  void sendStatic(int type) async{
+    final uri = Uri.parse(Constants.BASE_URL+"statics");
+    final request = http.MultipartRequest('POST', uri);
+    request.fields["user_id"] = Constants.user.id.toString();
+    request.fields["video_id"] = Constants.video.id.toString();
+    request.fields["action"] = type.toString();
+    final response = await request.send();
+  }
 
 // Method to handle platform channel callbacks
   Future<void> _methodCallHandler(MethodCall call) async {
@@ -159,6 +100,7 @@ class VideoState extends State<WatchVideoPage> {
       setState(() {
         isRecording = true;
       });
+      sendStatic(2);
       showExitDialog(context);
     } else if (call.method == 'screenRecordingStopped') {
       setState(() {
@@ -194,6 +136,10 @@ class VideoState extends State<WatchVideoPage> {
 
   @override
   void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     platform.setMethodCallHandler(null);
     super.dispose();
   }
@@ -201,73 +147,101 @@ class VideoState extends State<WatchVideoPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    print(isRecording);
-    print(isScreen);
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-            color: Colors.white
-        ),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
 
-        title: Text(Constants.video.name,style: theme.textTheme.titleLarge!.copyWith(height: 1.60),),
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-         children: [
-           Visibility(
-             visible: !isRecording && !isScreen,
-             child: Expanded(
-               child: Container(
-                   padding: EdgeInsets.all(10.0),
-                   color: Color(0xE00909),
-                   child: Container(
-                     child: SafeArea(
-                       child: Visibility(
-                         visible: !isRecording,
-                         child: VimeoPlayer(
-                           videoId: "1048331820",
-                         ),
-                       ),
-                     ),
-                   )
-               
-               ),
-             ),
-           ),
-           Visibility(
-             visible: isScreen,
-             child: Container(
-               child: Column(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 children: [
-                   Text("Screenshot not available!!"),
-                   CustomElevatedButton(
-                       text: "Resume Video",
-                     margin: EdgeInsets.only(left: 20.h,right: 20.h),
-                     onPressed: (){
-                       setState(() {
-                         isScreen = false;
-                       });
-                     },
+      child: Scaffold(
+        extendBodyBehindAppBar: isFullScreen ? true : false,
+        resizeToAvoidBottomInset: false,
+        appBar: isFullScreen ? null : AppBar(
+          iconTheme: IconThemeData(color: Colors.white),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(Constants.video.name, style: theme.textTheme.titleLarge!.copyWith(height: 1.60)),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.fullscreen),
+              onPressed: () {
+                setState(() {
+                  isFullScreen = true;
+                });
+                SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive); // إخفاء كل شيء
+              },
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            // ✅ الفيديو بكامل الشاشة
+            Visibility(
+              visible: isFullScreen,
+              child: Transform.scale(
+                scale: 1.05, // زوّدها حسب المساحات المتبقية يمين ويسار
+                child: VimeoPlayer(
+                  videoId: Constants.video.link,
+                ),
+              ),
+            ),
+            Visibility(
+              visible: !isFullScreen,
+              child: Transform.scale(
+                scale: 1, // زوّدها حسب المساحات المتبقية يمين ويسار
+                child: VimeoPlayer(
+                  videoId: Constants.video.link,
+                ),
+              ),
+            ),
 
-                   )
-                 ],
-               ),
-             ),
-           ),
-           Visibility(
-             visible: isRecording,
-             child: Container(
-               child: Column(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 children: [
-                   Text("Screen Record not available!!")
-                 ],
-               ),
-             ),
-           )
-         ],
+
+            // ✅ زر الخروج من fullscreen
+            if (isFullScreen)
+              Positioned(
+                top: 20,
+                right: 20,
+                child: IconButton(
+                  icon: Icon(Icons.fullscreen_exit, color: Colors.white),
+                  onPressed: () {
+                    setState(() {
+                      isFullScreen = false;
+                    });
+                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+                  },
+                ),
+              ),
+
+            // ✅ رسالة لقطة الشاشة
+            if (isScreen)
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Screenshot not available!!", style: TextStyle(color: Colors.white)),
+                    SizedBox(height: 20),
+                    CustomElevatedButton(
+                      text: "Resume Video",
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      onPressed: () {
+                        setState(() {
+                          isScreen = false;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+
+            // ✅ رسالة التسجيل
+            if (isRecording)
+              Center(
+                child: Text("Screen Record not available!!", style: TextStyle(color: Colors.white)),
+              ),
+          ],
+        ),
+
       ),
     );
   }

@@ -1,29 +1,26 @@
 
+
+
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:nile_training/core/app_export.dart';
-
 import '../../core/utils/Constants.dart';
-import '../../models/Category.dart';
 import '../../models/Course.dart';
 import '../../theme/theme_helper.dart';
 
-class CoursesPage extends StatefulWidget{
+class  MyCoursesPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return CoursesState();
+    // TODO: implement createState
+    return _CoursesPageState();
   }
 
 }
 
-
-class CoursesState extends State<CoursesPage>{
-
+class _CoursesPageState extends State<MyCoursesPage>{
   List<Course> courses = [];
 
 
@@ -36,17 +33,16 @@ class CoursesState extends State<CoursesPage>{
 
 
   Future<String> loadcourses() async{
-    
+
     final response = await http.post(
-      Uri.parse(Constants.BASE_URL+"courses"),
-      headers: {
-        "Content-type" : "application/json",
-        "Accept":"application/json"
-      },
-      body:jsonEncode({
-        "category_id": Constants.category.id,
-        "user_id" : Constants.user.id
-      })
+        Uri.parse(Constants.BASE_URL+"my_courses"),
+        headers: {
+          "Content-type" : "application/json",
+          "Accept":"application/json"
+        },
+        body:jsonEncode({
+          "user_id" : Constants.user.id
+        })
     );
     if(response.statusCode == 200){
       setState(() {
@@ -58,12 +54,12 @@ class CoursesState extends State<CoursesPage>{
           final catObj = coursesData[i];
           Course  course = Course(catObj['id'].toString(), catObj['name']
               ,catObj['start_date'],catObj['end_date'],
-          catObj['teacherName'] ?? "",
+              catObj['teacherName'] ?? "",
               catObj['notes'] ?? "",
               catObj['cash_price'] != null ? catObj['cash_price'].toString() : "",
               catObj['installments_price'] != null ? catObj['installments_price'].toString() : "",
-          catObj['image'] ?? "",
-          catObj['can_watch'].toString());
+              catObj['image'] ?? "",
+              catObj['can_watch'].toString());
 
           courses.add(course);
         }
@@ -80,14 +76,6 @@ class CoursesState extends State<CoursesPage>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.white
-        ),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
-        title: Text(Constants.category.name,style: theme.textTheme.titleLarge!.copyWith(height: 1.60),),
-      ),
       body: Container(
           padding: EdgeInsets.all(10.0),
           color: Color(0xE00909),
@@ -117,13 +105,13 @@ class CoursesState extends State<CoursesPage>{
                                     borderRadius: BorderRadius.circular(20.h),
                                     child: CustomImageView(
                                       imagePath: ImageConstant.imgDefaultCourse,
-                                      height: 250.h,
+                                      height: 200.h,
                                       width: double.maxFinite,
                                       alignment: Alignment.center,
                                     ),
                                   ),
                                 ),),
-                                Center(child: Text(courses[index].name,style: theme.textTheme.bodyMedium!.copyWith(height: 1.60),)),
+                                Center(child: Text(courses[index].name,style: theme.textTheme.bodySmall!.copyWith(height: 1.60),)),
                               ],
                             )
                         ),
@@ -145,6 +133,7 @@ class CoursesState extends State<CoursesPage>{
 
       ),
     );
+
   }
 
 }
